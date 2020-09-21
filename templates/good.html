@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <script>
+    $(document).ready(function(){
+        var socket = io.connect('http://localhost:5000');
+        socket.on('response', function(response) {
+            $("ol").append('<br> Nuizia: ', response['data']);
+            })
+        $("#message").keypress(function(e){
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code == 13){
+                var question= $('#message').val()
+                $("ol").append('<br>', question);
+                socket.emit('my event', {'data' : question });
+                socket.emit('ping');
+                 $('#message').val('')
+                 return false;
+                }
+             else{
+             return true;
+             }
+        });
+
+});
+
+
+
+    </script>
+</head>
+<body>
+<ol>Good morning !</ol>
+<div id="textarea">
+        <textarea rows="2" name="message" id="message" class="message" placeholder="Ask me question"
+                  cols="60"></textarea>
+</body>
+</html>
+
+<style>
+    textarea {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ ol{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+</style>
